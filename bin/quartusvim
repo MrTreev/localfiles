@@ -1,0 +1,4 @@
+#!/bin/bash
+
+unset LD_LIBRARY_PATH
+/bin/alacritty -e nvim -c"$1" "$2" > /dev/null 2>&1

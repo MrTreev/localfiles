@@ -1,0 +1,6 @@
+#!/bin/sh
+# Syncs the local and remote instances of NukeBot
+
+# recursive, permissions, symlinks, modify times, group, owner, special files, prune empty dirs, human readable, progress
+rsync -rpltgoDmhp ~/Documents/Personal/NukeBot root@oliverpatterson.xyz:/root/NukeBot
+ssh root@oliverpatterson.xyz reboot now

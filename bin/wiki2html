@@ -1,0 +1,7 @@
+#!/bin/sh
+
+env HUGO_baseURL="file:///home/${USER}/Documents/VimWiki/html/" \
+    hugo --themesDir ~/Documents/Vimwiki/themes -t vimwiki \
+    --config ~/Documents/VimWiki/config.toml \
+    --contentDir ~/Documents/VimWiki/wiki \
+    -d ~/Documents/VimWiki/html --quiet > /dev/null

@@ -1,0 +1,61 @@
+#!/bin/sh
+
+usage_message="usage: $(basename $0) file"
+
+[ -z "$1" ] && echo -e "$usage_message" && exit
+
+help_message="
+options:
+	-h|--help         Shows this message
+	-d|--doi doi      Query DOI directly
+"
+
+optspec=":h-:"
+
+while getopts "$optspec" optchar; do
+	case "${optchar}" in
+		-)
+			case "${OPTARG}" in
+				help)
+					echo -e "$usage_message" >&2
+					echo -e "$help_message" >&2
+					exit 2;;
+				doi)
+					doi="$1";;
+				*)
+					echo "Unknown option --${OPTARG}" >&2
+					exit 2;;
+			esac;;
+		h)
+			echo -e "$usage_message" >&2
+			echo -e "$help_message" >&2
+			exit 2;;
+		d)
+			doi="$1";;
+		*)
+			echo "Non-option argument: '-${OPTARG}'" >&2
+			exit 1;;
+	esac
+done
+
+
+
+################################################################
+# Main Section
+################################################################
+
+if [ -f "$1" ] && [ -z "$doi" ]; then
+	# Try to get DOI from pdfinfo or pdftotext output.
+	doi=$(pdfinfo "$1" | grep -io "doi:.*") ||
+	doi=$(pdftotext "$1" 2>/dev/null - | sed -n '/[dD][oO][iI]:/{s/.*[dD][oO][iI]:\s*\(\S\+[[:alnum:]]\).*/\1/p;q}') ||
+	exit 1
+fi
+
+if [ -n "$doi" ] ; then
+	# Check crossref.org for the bib citation.
+	curl -s "https://api.crossref.org/works/$doi/transform/application/x-bibtex" -w "\\n"
+else
+	echo "No DOI found"
+	exit 1
+fi
+

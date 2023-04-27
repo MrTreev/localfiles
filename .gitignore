@@ -1,0 +1,13 @@
+!share/bg
+!share/calcurse
+!share/gnupg
+!share/larbs
+!share/mime
+!share/newsboat
+!share/nvim
+*.log
+cache*
+lib
+share
+state
+creds

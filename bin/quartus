@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# Run intel quartus 20.1.1 from .local/share
+
+cd ~/.local/share/Quartus/quartus/bin/
+
+bash quartus
