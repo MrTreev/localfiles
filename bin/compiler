@@ -49,8 +49,10 @@ case "$ext" in
 	ms) preconv "$file" | refer -PS -e | groff -me -ms -kept -T pdf > "$base".pdf ;;
 	org) emacs "$file" --batch -u "$USER" -f org-latex-export-to-pdf ;;
 	py) python "$file" ;;
-	[rR]md) if [[ -e "./_build" ]]; then
+	[rR]md) if [ -e "./_build" ]; then
 		./_build
+	elif [ -e "../_build" ]; then
+		../_build
 	else
 		Rscript -e "rmarkdown::render('$file', quiet=TRUE)"
 	fi;;
