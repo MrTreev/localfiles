@@ -6,8 +6,9 @@ usage_message="usage: $(basename $0) file"
 
 help_message="
 options:
-	-h|--help         Shows this message
-	-d|--doi doi      Query DOI directly
+	-h|--help           Shows this message
+	-d|--doi doi        Query DOI directly
+    -a|--arxiv id       Query arXiv ID
 "
 
 optspec=":h-:"
@@ -48,6 +49,7 @@ if [ -f "$1" ] && [ -z "$doi" ]; then
 	# Try to get DOI from pdfinfo or pdftotext output.
 	doi=$(pdfinfo "$1" | grep -io "doi:.*") ||
 	doi=$(pdftotext "$1" 2>/dev/null - | sed -n '/[dD][oO][iI]:/{s/.*[dD][oO][iI]:\s*\(\S\+[[:alnum:]]\).*/\1/p;q}') ||
+	doi=$(pdftotext "$1" 2>/dev/null - | sed -n '/arXiv:/{s/.*arXiv:\s*\(\S\+[[:alnum:]]\).*/\1/p;q}') ||
 	exit 1
 fi
 

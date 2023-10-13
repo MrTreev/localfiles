@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
-HOME=$HOME/.local/share/steam_garbage # or wherever
-export STEAM_RUNTIME=0
-export STEAM_RUNTIME_HEAVY=0
-export DBUS_FATAL_WARNINGS=0
-export LD_LIBRARY_PATH="/usr/lib/steam:/usr/lib32/steam${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
+HOME=$HOME/.local/share/steam_garbage \
+STEAM_RUNTIME=0 \
+STEAM_RUNTIME_HEAVY=0 \
+DBUS_FATAL_WARNINGS=0 \
+LD_LIBRARY_PATH="/usr/lib/steam:/usr/lib32/steam${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH" \
 exec /usr/lib/steam/steam "$@"

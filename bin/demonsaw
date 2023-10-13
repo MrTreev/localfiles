@@ -1,2 +1,4 @@
 #!/bin/sh
-~/.local/share/demonsaw/demonsaw
+pushd ~/.local/share/demonsaw/
+./demonsaw
+popd

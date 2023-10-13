@@ -1,0 +1,3 @@
+HOME=$HOME/.local/share/MATLAB/ # or wherever
+export env
+exec /home/opatterson/.local/share/MATLAB/R2023a/bin/matlab -nosplash -sd "/home/opatterson/Repos/University/ml-testing/matlab-ml/" $@

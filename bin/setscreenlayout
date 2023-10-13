@@ -1,0 +1,22 @@
+#!/bin/sh
+
+# This script does the following:
+#	Run by itself, set the layout (at X start).
+#	If given a file, set that as the new layout.
+
+# test for x display server
+if xhost >& /dev/null ; then
+
+    # Location of link to layout script
+    screen_layout="${XDG_DATA_HOME:-$HOME/.local/share/}/screen_layout"
+    
+    trueloc="$(readlink -f "$1")" &&
+    case "$(file --mime-type -b "$trueloc")" in
+    	text/x-shellscript ) ln -sf "$(readlink -f "$1")" "$screen_layout" && notify-send -i "$screen_layout" "Changing default layout..." ;;
+    	*) notify-send "Error" "Not a valid layout script." ; exit 1;;
+    esac
+    
+    . $screen_layout
+else
+    : # Wayland things here
+fi

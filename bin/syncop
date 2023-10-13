@@ -1,6 +1,0 @@
-#!/bin/sh
-# Syncs the local and remote instances of oliverpatterson.xyz
-
-# recursive, permissions, symlinks, modify times, group, owner, special files, prune empty dirs, human readable, progress
-rsync -vrpLktgoDmhp ~/Documents/Personal/ProjectPhylactery/oliverpattersonxyz root@oliverpatterson.xyz:/var/www/
-ssh root@oliverpatterson.xyz reboot now

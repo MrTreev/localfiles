@@ -13,10 +13,11 @@ file=$(readlink -f "$1")
 dir=${file%/*}
 base="${file%.*}"
 ext="${file##*.}"
+makedir='n'
 
 cd "$dir" || exit 1
 
-textype() { \
+textype() {
 	textarget="$(getcomproot "$file" || echo "$file")"
 	echo "$textarget"
 	command="pdflatex"
@@ -28,6 +29,9 @@ textype() { \
 		$command --output-directory="${textarget%/*}" "${textarget%.*}"
 }
 
+if [[ "$(ls $dir | tr "[:upper:]" "[:lower:]")" =~ "makefile" ]]; then
+    make && exit 0 || exit 1
+fi
 case "$ext" in
 	# Try to keep these cases in alphabetical order.
 	[0-9]) preconv "$file" | refer -PS -e | groff -mandoc -T pdf > "$base".pdf ;;
