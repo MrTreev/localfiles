@@ -59,7 +59,7 @@ case "$ext" in
 		../_build
 	else
 		Rscript -e "rmarkdown::render('$file', quiet=TRUE)"
-	fi;;
+	fi ;;
 	rs) cargo build ;;
 	sass) sassc -a "$file" "$base.css" ;;
 	scad) openscad -o "$base".stl "$file" ;;
