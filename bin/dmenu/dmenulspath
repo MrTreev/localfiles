@@ -1,0 +1,12 @@
+#!/bin/sh
+{
+  set -f;
+  IFS=:;
+  for p in $PATH; do
+    set +f;
+    [ -n "$p" ] || p=.;
+    for f in "$p"/.[!.]* "$p"/..?* "$p"/*; do
+      [ -f "$f" ] && [ -x "$f" ] && printf '%s\n' "${f##*/}";
+    done;
+  done;
+}

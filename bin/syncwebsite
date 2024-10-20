@@ -1,0 +1,45 @@
+#!/bin/sh
+set -e
+set -u
+
+REMOTE_USER="root"
+REMOTE_SERVER="oliverpatterson.xyz"
+REMOTE_WWW="/var/www"
+LOCAL_REPO="${HOME}/Repos/MrTreev/phylactery"
+
+sync_item(){
+    rsync \
+        --recursive \
+        --links \
+        --times \
+        --perms \
+        --owner \
+        --group \
+        --delete \
+        --prune-empty-dirs \
+        --update \
+        "${1}/." \
+        "${REMOTE_USER}@${REMOTE_SERVER}:${2}"
+}
+
+build_hugo(){
+    cd "${1}"
+
+    hugo \
+        --buildDrafts=false \
+        --buildExpired=false \
+        --buildFuture=false \
+        --cleanDestinationDir=true \
+        --minify=true \
+        --forceSyncStatic=true
+
+    cd -
+}
+
+build_hugo  "${LOCAL_REPO}/oliverpatterson.xyz"
+build_hugo  "${LOCAL_REPO}/mrtreev.xyz"
+
+sync_item   "${LOCAL_REPO}/nginx"                       "/etc/nginx"
+sync_item   "${LOCAL_REPO}/oliverpatterson.xyz/public"  "${REMOTE_WWW}/oliverpatterson"
+sync_item   "${LOCAL_REPO}/mrtreev.xyz/public"          "${REMOTE_WWW}/mrtreev"
+
