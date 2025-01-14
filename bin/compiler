@@ -50,26 +50,26 @@ elif [ -e "$(find "${toplevel}" -maxdepth 1 -type f -iname 'makefile')" ]; then
 fi
 
 case "$(echo "${ext}" | tr '[:upper:]' '[:lower:]')" in
-	# Try to keep these cases in alphabetical order.
-	[0-9]) preconv "$file" | refer -PS -e | groff -mandoc -T pdf > "$base".pdf ;;
-	c) cc "$file" -o "$base" && "$base" ;;
-	cpp) g++ "$file" -o "$base" && "$base" ;;
-	cs) mcs "$file" && mono "$base".exe ;;
-	go) go run "$file" ;;
-	h) sudo make install ;;
-	java) javac -d classes "$file" && java -cp classes "${1%.*}" ;;
-	m) octave "$file" ;;
-	mom) preconv "$file" | refer -PS -e | groff -mom -kept -T pdf > "$base".pdf ;;
-	ms) preconv "$file" | refer -PS -e | groff -me -ms -kept -T pdf > "$base".pdf ;;
-	org) emacs "$file" --batch -u "$USER" -f org-latex-export-to-pdf ;;
-	py) python "$file" ;;
-	rmd) Rscript -e "rmarkdown::render('$file', quiet=TRUE)" ;;
-	rs) cargo build ;;
-	sass) sassc -a "$file" "$base.css" ;;
-	scad) openscad -o "$base".stl "$file" ;;
-	sent) setsid -f sent "$file" 2>/dev/null ;;
-	md)	markdownc ;;
-	tex) textype ;;
-    mmd) mmdc --input "$file" --output "${base}.pdf" ;;
-	*) sed -n '/^#!/s/^#!//p; q' "$file" | xargs -r -I % "$file" ;;
+    # Try to keep these cases in alphabetical order.
+    [0-9])  preconv "$file" | refer -PS -e | groff -mandoc -T pdf > "$base".pdf ;;
+    c)      cc "$file" -o "$base" && "$base" ;;
+    cpp)    g++ "$file" -o "$base" && "$base" ;;
+    cs)     mcs "$file" && mono "$base".exe ;;
+    go)     go run "$file" ;;
+    h)      sudo make install ;;
+    java)   javac -d classes "$file" && java -cp classes "${1%.*}" ;;
+    m)      octave "$file" ;;
+    md)     buildMarkdown ;;
+    mmd) 	mmdc --input "$file" --output "${base}.pdf" ;;
+    mom)    preconv "$file" | refer -PS -e | groff -mom -kept -T pdf > "$base".pdf ;;
+    ms)     preconv "$file" | refer -PS -e | groff -me -ms -kept -T pdf > "$base".pdf ;;
+    org)    emacs "$file" --batch -u "$USER" -f org-latex-export-to-pdf ;;
+    py)     python "$file" ;;
+    rmd) 	Rscript -e "rmarkdown::render('$file', quiet=TRUE)" ;;
+    rs)     cargo build ;;
+    sass)   sassc -a "$file" "$base.css" ;;
+    scad)   openscad -o "$base".stl "$file" ;;
+    sent)   setsid -f sent "$file" 2>/dev/null ;;
+    tex)    textype "$file" ;;
+    *)      sed -n '/^#!/s/^#!//p; q' "$file" | xargs -r -I % "$file" ;;
 esac

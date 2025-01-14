@@ -1,3 +1,5 @@
 #!/bin/sh
-
-wine "/home/opatterson/Documents/Gaming/DDO/DDOBuilderV2_2.0.0.12/DDOBuilder.exe"
+set -e
+cd /home/opatterson/Documents/Gaming/DDO/DDOBuilder100196/
+wine DDOBuilder.exe
+cd -
