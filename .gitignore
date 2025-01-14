@@ -1,3 +1,10 @@
+*.log
+cache*
+/lib/
+/share/
+/state/
+/creds/
+/make/
 !share/bg
 !share/calcurse
 !share/gnupg
@@ -5,9 +12,3 @@
 !share/mime
 !share/newsboat
 !share/nvim
-*.log
-cache*
-lib
-share
-state
-creds

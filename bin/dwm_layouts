@@ -1,0 +1,40 @@
+#!/bin/sh
+
+if [ -n "$1" ]; then
+	LAYOUTS_OUT=1
+else
+	LAYOUTS_OUT=0
+fi
+
+SRC="${HOME}/Repos/MrTreev/dwm/src"
+
+binding=$(
+	sed -nE "${SRC}/config.h" \
+		-e 's/\s*\{MODKEY\s*\S?\s*(Shift)*(Mask)*,\s*XK_([a-z]),\s*setlayout,\s*\{\.v\s*=\s*&layouts\[[0-9]\].*/setlayout \1 \3/' \
+		-e 's/Shift ([a-z])/\U\1/' \
+		-e 's/\s//g' \
+		-e 's/setlayout([a-zA-Z]+)/\1/p'
+)
+
+layout=$(
+	sed -nE "${SRC}/config.h" \
+		-e '/layouts\[\]\s*=\s*\{/,/\};/s/\s*\{.*\/\*\s(.*)\s\*\//\1/p' \
+)
+
+SAVEIFS=$IFS
+IFS=$'\n'
+read -d\0 -A binds <<< "${binding}\0"
+read -d\0 -A layouts <<< "${layout}\0"
+IFS=$SAVEIFS
+
+message=""
+for (( i=1; i<${#binds[*]}; ++i)); do
+	message="${message}${binds[i]} - ${layouts[i]}
+"
+done
+
+if [ "${LAYOUTS_OUT}" -eq 0 ]; then
+	notify-send ${message}
+else
+	echo "${message}"
+fi
