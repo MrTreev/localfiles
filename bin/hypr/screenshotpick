@@ -1,0 +1,25 @@
+#!/bin/sh
+set -eu
+
+case "${1}" in
+	copy) shot_type="copy";;
+	save) shot_type="save";;
+	*) notify-send "Error in ${0%%*/}: expected copy or send, got '${1}'";;
+esac
+
+case "$(
+	printf "%s\n" \
+		"a selected area" \
+		"current window" \
+		"current screen" \
+		"full screen" \
+	| wofi -d;
+)" in
+	"a selected area")	grimblast --notify "${shot_type}" area ;;
+	"current window")	grimblast --notify "${shot_type}" active ;;
+	"current screen")	grimblast --notify "${shot_type}" output ;;
+	"full screen")		grimblast --notify "${shot_type}" screen ;;
+esac
+
+unset choices
+unset -f picker

@@ -1,10 +1,27 @@
 #!/bin/sh
 
-case $(printf "%s\n" "󰐥 Power Off" "󰑐 Restart" "󰖔 Suspend" "󰑻 Hibernate" "󰌾 Lock" "󰗽 Log Out" | wofi -d) in
-	"󰐥 Power Off") systemctl poweroff ;;
-	"󰑐 Restart") systemctl reboot ;;
+hyprlogout(){
+	if command -v uwsm  >/dev/null 2>&1 && uwsm check is-active; then
+		uwsm stop;
+	else
+		hyprctl dispatch exit 1;
+	fi;
+}
+
+case $(
+    printf "%s\n" \
+        "󰌾 Lock" \
+        "󰗽 Log Out" \
+        "󰖔 Suspend" \
+        "󰑻 Hibernate" \
+        "󰑐 Restart" \
+        "󰐥 Power Off" \
+    | wofi -d;
+) in
+	"󰌾 Lock") hyprlock ;;
+	"󰗽 Log Out") hyprlogout ;;
 	"󰖔 Suspend") systemctl suspend ;;
 	"󰑻 Hibernate") systemctl hibernate ;;
-	"󰌾 Lock") hyprlock ;;
-	"󰗽 Log Out") hyprctl dispatch exit 1 ;;
+	"󰑐 Restart") systemctl reboot ;;
+	"󰐥 Power Off") systemctl poweroff ;;
 esac
