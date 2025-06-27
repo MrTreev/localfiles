@@ -15,7 +15,7 @@ dir=${file%/*}
 base="${file%.*}"
 ext="${file##*.}"
 
-git status >/dev/null && toplevel="$(git rev-parse --show-toplevel)"
+{ git status >/dev/null && toplevel="$(git rev-parse --show-toplevel)"; } || nogit=1
 
 cd "$dir" || exit 1
 
@@ -43,10 +43,12 @@ markdownc() {
 	fi ;
 }
 
-if [ -e "$(find "${dir}" -maxdepth 1 -type f -iname 'makefile')" ]; then
-    make && exit 0 || exit 1
-elif [ -e "$(find "${toplevel}" -maxdepth 1 -type f -iname 'makefile')" ]; then
-	cd "${toplevel}" && make && exit 0 || exit 1
+if [ -n "$nogit" ]; then
+    if [ -e "$(find "${dir}" -maxdepth 1 -type f -iname 'makefile')" ]; then
+        make && exit 0 || exit 1
+    elif [ -e "$(find "${toplevel}" -maxdepth 1 -type f -iname 'makefile')" ]; then
+    	cd "${toplevel}" && make && exit 0 || exit 1
+    fi
 fi
 
 case "$(echo "${ext}" | tr '[:upper:]' '[:lower:]')" in
