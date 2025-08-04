@@ -1,0 +1,21 @@
+#!/bin/sh
+set -eu
+
+abort(){
+    progname="$(basename "${0}";)";
+    echo "${progname}: Rotate framebuffer";
+    echo "usage: ${progname} <0|90|180|270>";
+    exit 1;
+}
+
+[ $# -eq 1 ] || abort
+
+case "${1}" in
+    0)   rot='0';;
+    90)  rot='1';;
+    180) rot='2';;
+    270) rot='3';;
+    *)   abort;;
+esac;
+
+echo "${rot}" | sudo tee /sys/class/graphics/fbcon/rotate_all;
